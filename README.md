@@ -1,2 +1,15 @@
-# website-ipfs.idns.eth
-source for ipfs.idns.eth
+# umi project
+
+## Getting Started
+
+Install dependencies,
+
+```bash
+$ yarn
+```
+
+Start the dev server,
+
+```bash
+$ yarn start
+```
