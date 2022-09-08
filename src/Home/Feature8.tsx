@@ -1,139 +1,135 @@
-import React from 'react';
-import OverPack from 'rc-scroll-anim/lib/ScrollOverPack';
-import QueueAnim from 'rc-queue-anim';
-import { Carousel as AntCarousel, Row, Col } from 'antd';
-import { getChildrenToRender } from './utils';
+import React, { useRef, useState } from 'react';
+import { Row, Col, Button } from 'antd';
+import {
+  DownloadOutlined,
+  EditOutlined,
+  CheckOutlined,
+  FileProtectOutlined,
+} from '@ant-design/icons';
+import SWARM_KEY from '@/assets/swarm.txt';
 
-class Feature8 extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.carouselRef = React.createRef();
-    this.state = {
-      current: 0,
-    };
-  }
-
-  onTitleClick = (_, i) => {
-    const carouselRef = this.carouselRef.current.childRefs.carousel;
-    carouselRef.goTo(i);
-  };
-
-  onBeforeChange = (_, newIndex) => {
-    this.setState({
-      current: newIndex,
-    });
-  };
-
-  getChildrenToRender = (dataSource) => {
-    const { current } = this.state;
-    const { Carousel, childWrapper: buttonWrapper } = dataSource;
-    const { children: carouselChild, wrapper, ...carouselProps } = Carousel;
-    const {
-      titleWrapper,
-      children: childWrapper,
-      ...childrenProps
-    } = carouselChild;
-
-    const {
-      barWrapper,
-      title: titleChild,
-      ...titleWrapperProps
-    } = titleWrapper;
-    const titleToRender = [];
-
-    const childrenToRender = childWrapper.map((item, ii) => {
-      const { title, children: childRow, ...rowProps } = item;
-      if (childWrapper.length > 1) {
-        titleToRender.push(
-          <div
-            {...title}
-            key={ii.toString()}
-            onClick={(e) => {
-              this.onTitleClick(e, ii);
-            }}
-            className={
-              ii === current
-                ? `${title.className || ''} active`
-                : title.className
-            }
-          >
-            {title.children}
-          </div>,
-        );
-      }
-      const childrenItem = childRow.map(($item, i) => {
-        const { children: colChild, arrow, ...colProps } = $item;
-        const { ...childProps } = colChild;
-        return (
-          <Col {...colProps} key={i.toString()}>
-            <div {...childProps}>
-              {colChild.children.map(getChildrenToRender)}
-            </div>
-            {arrow && (
-              <div {...arrow}>
-                <img src={arrow.children} alt="img" />
+const Feature8 = (props: any) => {
+  return (
+    <div className="home-page-wrapper feature8-wrapper">
+      <div className="home-page feature8">
+        <div className="feature8-title-wrapper">
+          <div className="feature8-title-h1">接入流程</div>
+        </div>
+        <div className="feature8-carousel">
+          <div className="feature8-block-wrapper">
+            <div className="feature8-block">
+              <div className="feature8-carousel-title-wrapper">
+                <div className="feature8-carousel-title"></div>
               </div>
-            )}
-          </Col>
-        );
-      });
-
-      return (
-        <div key={ii.toString()}>
-          <QueueAnim
-            component={Row}
-            type="bottom"
-            componentProps={{ type: 'flex' }}
-            {...rowProps}
-          >
-            {childrenItem}
-          </QueueAnim>
-        </div>
-      );
-    });
-
-    return (
-      <QueueAnim
-        key="queue"
-        type="bottom"
-        ref={this.carouselRef}
-        {...childrenProps}
-      >
-        {childWrapper.length > 1 && (
-          <div {...titleWrapperProps} key="title">
-            <div {...titleChild}>{titleToRender}</div>
+              <Row className="feature8-block-row">
+                <Col md={6} xs={24} className="feature8-block-col">
+                  <div className="feature8-block-child">
+                    <div className="feature8-block-image">
+                      <DownloadOutlined></DownloadOutlined>
+                    </div>
+                    <div className="feature8-block-title">下载IPFS</div>
+                    <div className="feature8-block-content">
+                      IPFS-DESKTOP不支持私有网络
+                      <br />
+                      <a
+                        href="https://github.com/ipfs/kubo/releases"
+                        target="_blank"
+                      >
+                        点击下载IPFS Kubo
+                      </a>
+                    </div>
+                  </div>
+                  <img
+                    className="feature8-block-arrow"
+                    src={
+                      'https://gw.alipayobjects.com/zos/basement_prod/167bee48-fbc0-436a-ba9e-c116b4044293.svg'
+                    }
+                  ></img>
+                </Col>
+                <Col md={6} xs={24} className="feature8-block-col">
+                  <div className="feature8-block-child">
+                    <div className="feature8-block-image">
+                      <FileProtectOutlined />
+                    </div>
+                    <div className="feature8-block-title">
+                      下载并导入swarm.key
+                    </div>
+                    <div className="feature8-block-content">
+                      <a
+                        href="#"
+                        onClick={() => {
+                          var blob = new Blob([SWARM_KEY], {
+                            type: 'text/plain',
+                          });
+                          var a = document.createElement('a');
+                          var url = window.URL.createObjectURL(blob);
+                          var filename = 'swarm.key';
+                          a.href = url;
+                          a.download = filename;
+                          a.click();
+                          window.URL.revokeObjectURL(url);
+                        }}
+                      >
+                        点击下载swarm.key文件
+                      </a>
+                      <br />
+                      保存或者替换到~/.ipfs/swarm.key
+                    </div>
+                  </div>
+                  <img
+                    className="feature8-block-arrow"
+                    src={
+                      'https://gw.alipayobjects.com/zos/basement_prod/167bee48-fbc0-436a-ba9e-c116b4044293.svg'
+                    }
+                  ></img>
+                </Col>
+                <Col md={6} xs={24} className="feature8-block-col">
+                  <div className="feature8-block-child">
+                    <div className="feature8-block-image">
+                      <EditOutlined />
+                    </div>
+                    <div className="feature8-block-title">修改配置</div>
+                    <div className="feature8-block-content">
+                      打开~/.ipfs/config文件
+                      <br />
+                      找到Bootstrap修改为"/dns/ipfs.idns.link/tcp/4002/ipfs/12D3KooWKWQLjyfuVBspjvrYt6pchrxBdSiTGRYisGaKRpkSwY4m"
+                    </div>
+                  </div>
+                  <img
+                    className="feature8-block-arrow"
+                    src={
+                      'https://gw.alipayobjects.com/zos/basement_prod/167bee48-fbc0-436a-ba9e-c116b4044293.svg'
+                    }
+                  ></img>
+                </Col>
+                <Col md={6} xs={24} className="feature8-block-col">
+                  <div className="feature8-block-child">
+                    <div className="feature8-block-image">
+                      <CheckOutlined />
+                    </div>
+                    <div className="feature8-block-title">重启完成</div>
+                    <div className="feature8-block-content">
+                      重启IPFS即可加入新的网络
+                    </div>
+                  </div>
+                  <img
+                    className="feature8-block-arrow"
+                    src={
+                      'https://gw.alipayobjects.com/zos/basement_prod/167bee48-fbc0-436a-ba9e-c116b4044293.svg'
+                    }
+                  ></img>
+                </Col>
+              </Row>
+            </div>
           </div>
-        )}
-        <AntCarousel
-          key="carousel"
-          {...carouselProps}
-          infinite={false}
-          beforeChange={this.onBeforeChange}
-        >
-          {childrenToRender}
-        </AntCarousel>
-        <div key="button" {...buttonWrapper}>
-          {buttonWrapper.children.map(getChildrenToRender)}
         </div>
-      </QueueAnim>
-    );
-  };
-
-  render() {
-    const { dataSource, isMobile, ...props } = this.props;
-    const { titleWrapper } = dataSource;
-    return (
-      <div {...props} {...dataSource.wrapper}>
-        <div {...dataSource.page}>
-          <div {...dataSource.titleWrapper}>
-            {titleWrapper.children.map(getChildrenToRender)}
+        <div className="feature8-button-wrapper">
+          <div className="feature8-button">
+            <Button>立即体验</Button>
           </div>
-          <OverPack {...dataSource.OverPack}>
-            {this.getChildrenToRender(dataSource)}
-          </OverPack>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 export default Feature8;
